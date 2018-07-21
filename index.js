@@ -1,14 +1,14 @@
 const bodyParser = require('body-parser')
 const express = require('express')
-var config = require('./config')
+const config = require('./config')
 const debug = require('debug')('people-api:server')
 const _ = require('lodash')
+const expressValidator = require('express-validator')
 
 
 const app = express()
-
+app.use(expressValidator())
 app.use(bodyParser.json())
-
 app.use((req, res, next) => {
 	res.header('Access-Control-Allow-Origin', '*')
 	res.header('Access-Control-Allow-Headers', [
@@ -30,31 +30,31 @@ app.use((req, res, next) => {
 	next()
 })
 
-const people = [
+let people = [
   {
     id: 1,
-    name: 'Joao',
+    firstName: 'Joao',
     lastName: 'Silva',
     cpf: 1233456789,
     birthdate: 156235612,
   },
   {
     id: 2,
-    name: 'Maria',
+    firstName: 'Maria',
     lastName: 'Rocha',
     cpf: 12334561231,
     birthdate: 98787123,
   },
   {
     id: 3,
-    name: 'Tereza',
+    firstName: 'Tereza',
     lastName: 'Nobre',
     cpf: 4433456789,
     birthdate: 4321235612,
   },
   {
     id: 4,
-    name: 'Leandro',
+    firstName: 'Leandro',
     lastName: 'Brega',
     cpf: 12334567123,
     birthdate: 156123125612,
@@ -98,6 +98,24 @@ app.get('/api/people/:id', (req, res) => {
 		data: person
 	})
 })
+
+app.post('/api/people', (req, res) => {
+  req.assert('firstName', 'firstName is required').notEmpty();
+  req.assert('lastName', 'lastName is required').notEmpty();
+  req.assert('birthdate', 'birthdate is required').notEmpty();
+  req.assert('cpf', 'cpf is required').notEmpty();
+  const errors = req.validationErrors()
+    
+  if( !errors ) {   //No errors were found.  Passed Validation!
+    people.push(req.body);
+    res.json({data: people});
+  } else {
+    return res.status(400).json({
+			errors
+		})
+  } 
+  
+});
 
 app.listen(config.server.port, () => {
 	debug('API listening on port 3000!')

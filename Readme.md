@@ -8,8 +8,8 @@ The following steps are being considered as implementation priority.
  - [x] Express js backend with data in memory
    - [x] Get request: list of people
 	- [x] Get request: single person
- - [ ] post request
-	- [ ] add new person
+ - [x] post request
+	- [x] add new person
  - [ ] put request
 	- [ ] edit one person
  - [ ] delete request
