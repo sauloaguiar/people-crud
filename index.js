@@ -2,7 +2,7 @@ const bodyParser = require('body-parser')
 const express = require('express')
 var config = require('./config')
 const debug = require('debug')('people-api:server')
-// const _ = require('lodash')
+const _ = require('lodash')
 
 
 const app = express()
@@ -64,6 +64,38 @@ const people = [
 app.get('/api/people', (req, res) => {
 	res.json({
 		data: people
+	})
+})
+
+app.get('/api/people/:id', (req, res) => {
+	const id = parseInt(req.params.id, 10)
+
+	if (_.isNaN(id)) {
+		return res.status(400).json({
+			errors: [
+				{
+					detail: `Specified id is not a number: ${req.params.id}`
+				}
+			]
+		})
+	}
+
+	const person = _.find(people, {
+		id
+	})
+
+	if (!person) {
+		return res.status(404).json({
+			errors: [
+				{
+					detail: `Could not find person with id ${id}`
+				}
+			]
+		})
+	}
+
+	return res.json({
+		data: person
 	})
 })
 
