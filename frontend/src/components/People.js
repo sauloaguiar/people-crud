@@ -7,18 +7,33 @@ import {
   TableRow,
   Paper,
   Grid,
+  Button,
 } from '@material-ui/core';
+import { FiberNew } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
+import classNames from 'classnames';
+import { Link } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: '10px',
+    margin: theme.spacing.unit,
   },
   paper: {
     padding: theme.spacing.unit * 2,
     textAlign: 'center',
     color: theme.palette.text.secondary,
+  },
+  leftIcon: {
+    marginRight: theme.spacing.unit,
+  },
+  iconSmall: {
+    fontSize: 20,
+  },
+  button: {
+    marginTop: theme.spacing.unit,
+    display: 'flex',
+    justifyContent: 'center',
   },
 });
 
@@ -74,6 +89,21 @@ class People extends Component {
         <Grid container>
           <Grid item xs={12}>
             {this.renderTable()}
+          </Grid>
+          <Grid item xs={12} className={classes.button}>
+            <Button
+              type="submit"
+              variant="outlined"
+              size="small"
+              className={classes.button}
+              component={Link}
+              to={'/new'}
+            >
+              <FiberNew
+                className={classNames(classes.leftIcon, classes.iconSmall)}
+              />
+              Person
+            </Button>
           </Grid>
         </Grid>
       </div>

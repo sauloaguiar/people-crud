@@ -5,6 +5,7 @@ import SaveIcon from '@material-ui/icons/Save';
 import classNames from 'classnames';
 import MaskedInput from 'react-text-mask';
 import InputMask from 'react-input-mask';
+import { withRouter } from 'react-router-dom';
 
 const styles = theme => ({
   root: {
@@ -51,9 +52,10 @@ class Person extends React.Component {
   }
 
   handleSubmit = event => {
+    const { firstName, lastName, birthdate, cpf } = this.state;
+    const { history } = this.props;
     event.preventDefault();
 
-    const { firstName, lastName, birthdate, cpf } = this.state;
     // write validations
     fetch('http://localhost:4000/api/people', {
       method: 'POST',
@@ -69,6 +71,7 @@ class Person extends React.Component {
     })
       .then(data => {
         console.log(data);
+        history.push('/');
       })
       .catch(error => console.log(error));
     console.log(firstName, lastName, birthdate, cpf);
@@ -138,4 +141,4 @@ class Person extends React.Component {
   }
 }
 
-export default withStyles(styles)(Person);
+export default withRouter(withStyles(styles)(Person));
