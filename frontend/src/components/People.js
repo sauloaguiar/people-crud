@@ -6,14 +6,14 @@ import {
   TableCell,
   TableRow,
   Paper,
-  Grid
+  Grid,
 } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    margin: '10px'
+    margin: '10px',
   },
   paper: {
     padding: theme.spacing.unit * 2,
@@ -30,8 +30,8 @@ class People extends Component {
 
   componentDidMount() {
     fetch('http://localhost:4000/api/people')
-    .then(response => response.json())
-    .then(data => this.setState({ people: data.data }));
+      .then(response => response.json())
+      .then(data => this.setState({ people: data.data }));
   }
 
   renderTable() {
@@ -39,42 +39,44 @@ class People extends Component {
     return (
       <Paper>
         <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>First name</TableCell>
-                <TableCell>Last name</TableCell>
-                <TableCell>CPF</TableCell>
-                <TableCell>Age</TableCell>
-                <TableCell>Actions</TableCell>
-                </TableRow>
-            </TableHead>
-            <TableBody>
-            {people.map(person =>
-                <TableRow key={person.id}>
-                <TableCell component="th" scope="row">{person.firstName} </TableCell>
+          <TableHead>
+            <TableRow>
+              <TableCell>First name</TableCell>
+              <TableCell>Last name</TableCell>
+              <TableCell>CPF</TableCell>
+              <TableCell>Age</TableCell>
+              <TableCell>Actions</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {people.map(person => (
+              <TableRow key={person.id}>
+                <TableCell component="th" scope="row">
+                  {person.firstName}{' '}
+                </TableCell>
                 <TableCell>{person.lastName}</TableCell>
                 <TableCell>{person.cpf}</TableCell>
                 <TableCell>{person.birthdate}</TableCell>
-                <TableCell><a>Edit</a>|<a>Delete</a></TableCell>
-                </TableRow>
-            )}
-            </TableBody>
-        </Table>    
-      </Paper>  
+                <TableCell>
+                  <a>Edit</a>|<a>Delete</a>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
     );
   }
   render() {
-    const{ classes } = this.props;
+    const { classes } = this.props;
     return (
       <div className={classes.root}>
-      <Grid container> 
+        <Grid container>
           <Grid item xs={12}>
-          {
-            this.renderTable()
-          }
+            {this.renderTable()}
+          </Grid>
         </Grid>
-      </Grid>
-    </div>
+      </div>
     );
   }
 }
