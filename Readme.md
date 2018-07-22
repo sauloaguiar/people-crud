@@ -12,8 +12,8 @@ The following steps are being considered as implementation priority.
 	- [x] add new person
  - [ ] put request
 	- [ ] edit one person
- - [ ] delete request
-	- [ ] remove one person
+ - [x] delete request
+	- [x] remove one person
 
 
 - FrontEnd

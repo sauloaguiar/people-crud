@@ -114,7 +114,23 @@ app.post('/api/people', (req, res) => {
 			errors
 		})
   } 
+});
+
+app.delete('/api/people/:id', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+
+	if (_.isNaN(id)) {
+		return res.status(400).json({
+			errors: [
+				{
+					detail: `Specified id is not a number: ${req.params.id}`
+				}
+			]
+		})
+  }
   
+  _.remove(people, (person) => person.id === id);
+  return res.status(204);
 });
 
 app.listen(config.server.port, () => {
