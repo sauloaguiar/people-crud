@@ -134,5 +134,5 @@ app.delete('/api/people/:id', (req, res) => {
 });
 
 app.listen(config.server.port, () => {
-	debug('API listening on port 3000!')
+	debug(`API listening on port ${config.server.port}!`)
 })
