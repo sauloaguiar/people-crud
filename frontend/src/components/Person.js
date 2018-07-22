@@ -74,13 +74,23 @@ class Person extends React.Component {
         history.push('/');
       })
       .catch(error => console.log(error));
-    console.log(firstName, lastName, birthdate, cpf);
   };
 
+  componentDidMount() {
+    const data = JSON.parse(localStorage.getItem('personData'));
+    if (data) {
+      this.setState({
+        firstName: data.firstName,
+        lastName: data.lastName,
+        cpf: data.cpf,
+        birthdate: data.birthdate,
+      });
+      localStorage.removeItem('personData');
+    }
+  }
+
   handleChange = (event, prop) => {
-    this.setState({ [prop]: event.target.value }, () => {
-      console.log(this.state);
-    });
+    this.setState({ [prop]: event.target.value });
   };
   render() {
     const { classes } = this.props;

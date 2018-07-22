@@ -8,11 +8,13 @@ import {
   Paper,
   Grid,
   Button,
+  IconButton,
 } from '@material-ui/core';
 import { FiberNew } from '@material-ui/icons';
 import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
+import { Delete, Edit } from '@material-ui/icons';
 
 const styles = theme => ({
   root: {
@@ -30,10 +32,13 @@ const styles = theme => ({
   iconSmall: {
     fontSize: 20,
   },
-  button: {
+  newButton: {
     marginTop: theme.spacing.unit,
     display: 'flex',
     justifyContent: 'center',
+  },
+  button: {
+    margin: theme.spacing.unit,
   },
 });
 
@@ -49,8 +54,22 @@ class People extends Component {
       .then(data => this.setState({ people: data.data }));
   }
 
+  handleDelete = person => event => {
+    event.preventDefault();
+    console.log(person);
+  };
+
+  handleEdit = person => event => {
+    const { history } = this.props;
+    event.preventDefault();
+    console.log(person);
+    localStorage.setItem('personData', JSON.stringify(person));
+    history.push(`/new`);
+  };
+
   renderTable() {
     const { people } = this.state;
+    const { classes } = this.props;
     return (
       <Paper>
         <Table>
@@ -73,7 +92,19 @@ class People extends Component {
                 <TableCell>{person.cpf}</TableCell>
                 <TableCell>{person.birthdate}</TableCell>
                 <TableCell>
-                  <a>Edit</a>|<a>Delete</a>
+                  <IconButton
+                    className={classes.button}
+                    aria-label="Delete"
+                    onClick={this.handleDelete(person)}
+                  >
+                    <Delete />
+                  </IconButton>|<IconButton
+                    className={classes.button}
+                    aria-label="Edit"
+                    onClick={this.handleEdit(person)}
+                  >
+                    <Edit />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}
@@ -90,12 +121,11 @@ class People extends Component {
           <Grid item xs={12}>
             {this.renderTable()}
           </Grid>
-          <Grid item xs={12} className={classes.button}>
+          <Grid item xs={12} className={classes.newButton}>
             <Button
               type="submit"
               variant="outlined"
               size="small"
-              className={classes.button}
               component={Link}
               to={'/new'}
             >
