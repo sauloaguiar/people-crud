@@ -49,14 +49,32 @@ class People extends Component {
   }
 
   componentDidMount() {
+    this.loadData();
+  }
+
+  loadData = () => {
     fetch('http://localhost:4000/api/people')
       .then(response => response.json())
-      .then(data => this.setState({ people: data.data }));
-  }
+      .then(data => {
+        console.log(data);
+        this.setState({ people: data.data });
+      });
+  };
 
   handleDelete = person => event => {
     event.preventDefault();
-    console.log(person);
+    // console.log(person);
+    fetch(`http://localhost:4000/api/people/${person.id}`, {
+      method: 'DELETE',
+      headers: {
+        'content-type': 'application/json',
+      },
+    })
+      .then(result => {
+        console.log(result);
+        this.loadData();
+      })
+      .catch(err => console.log(err));
   };
 
   handleEdit = person => event => {
