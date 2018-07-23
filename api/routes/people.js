@@ -3,6 +3,8 @@ const router = express.Router();
 const People = require("../models/people");
 const mongoose = require("mongoose");
 
+const MONGO_DUPLICATED_ITEM_ERROR_CODE = 11000;
+
 router.get("/", (req, res) => {
   People.find()
     .select("_id firstName lastName cpf birthdate")
@@ -51,7 +53,6 @@ router.get("/:id", (req, res) => {
     });
 });
 
-const DUPLICATED_ITEM = 11000;
 router.post("/", (req, res) => {
   const person = new People({
     _id: new mongoose.Types.ObjectId(),
@@ -75,15 +76,13 @@ router.post("/", (req, res) => {
     })
     .catch(err => {
       console.log(err);
-      if (err.code === DUPLICATED_ITEM) {
-        return res
-          .status(400)
-          .json({
-            errors: {
-              field: "cpf",
-              message: `duplicated entry for ${req.body.cpf}`
-            }
-          });
+      if (err.code === MONGO_DUPLICATED_ITEM_ERROR_CODE) {
+        return res.status(400).json({
+          errors: {
+            field: "cpf",
+            message: `duplicated entry for ${req.body.cpf}`
+          }
+        });
       }
       return res.status(400).json({ errors: err });
     });
@@ -106,18 +105,18 @@ router.patch("/:id", (req, res) => {
   const id = req.params.id;
   const updateOps = {};
   for (const op of req.body) {
-    updateOps[op.propName] = ops.value;
+    updateOps[op.propName] = op.value;
   }
   People.update({ _id: id }, { $set: updateOps })
     .exec()
     .then(result => {
-      return result.status(200).json({
+      return res.status(200).json({
         data: {
-          id: entry._id,
-          firstName: entry.firstName,
-          lastName: entry.lastName,
-          cpf: entry.cpf,
-          birthdate: entry.birthdate
+          id: result._id,
+          firstName: result.firstName,
+          lastName: result.lastName,
+          cpf: result.cpf,
+          birthdate: result.birthdate
         }
       });
     })

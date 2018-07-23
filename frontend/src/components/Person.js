@@ -47,6 +47,7 @@ class Person extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      id: '',
       firstName: '',
       lastName: '',
       birthdate: '',
@@ -60,58 +61,100 @@ class Person extends React.Component {
       },
       submitted: false,
       snackbar: false,
+      edit: false,
     };
   }
 
   handleSubmit = event => {
-    const { firstName, lastName, birthdate, cpf } = this.state;
+    const { firstName, lastName, birthdate, cpf, edit, id } = this.state;
     const { history } = this.props;
     event.preventDefault();
 
-    // write validations
-    fetch('http://localhost:4000/api/people', {
-      method: 'POST',
-      headers: {
-        'content-type': 'application/json',
-      },
-      body: JSON.stringify({
-        firstName,
-        lastName,
-        cpf,
-        birthdate,
-      }),
-    })
-      .then(response => {
-        if (response.status >= 200 && response.status < 300) {
-          console.log(response);
-          history.push('/');
-        } else if (response.status === 400) {
-          response.json().then(json => {
-            console.log(json);
-            this.setState({
-              submitted: true,
-              errors: {
-                [json.errors.field]: json.errors.message,
-              },
-              snackbar: true,
-            });
-          });
-        }
+    if (edit) {
+      fetch(`http://localhost:4000/api/people/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify([
+          {
+            propName: 'firstName',
+            value: firstName,
+          },
+          { propName: 'lastName', value: lastName },
+          { propName: 'cpf', value: cpf },
+          { propName: 'birthdate', value: birthdate },
+        ]),
       })
-      .catch(error => {
-        // what kind of error would go here?
-        console.log(error);
-      });
+        .then(response => {
+          if (response.status >= 200 && response.status < 300) {
+            console.log(response);
+            history.push('/');
+          } else if (response.status === 400) {
+            response.json().then(json => {
+              console.log(json);
+              this.setState({
+                submitted: true,
+                errors: {
+                  [json.errors.field]: json.errors.message,
+                },
+                snackbar: true,
+              });
+            });
+          }
+        })
+        .catch(error => {
+          // what kind of error would go here?
+          console.log(error);
+        });
+    } else {
+      // write validations
+      fetch('http://localhost:4000/api/people', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName,
+          lastName,
+          cpf,
+          birthdate,
+        }),
+      })
+        .then(response => {
+          if (response.status >= 200 && response.status < 300) {
+            console.log(response);
+            history.push('/');
+          } else if (response.status === 400) {
+            response.json().then(json => {
+              console.log(json);
+              this.setState({
+                submitted: true,
+                errors: {
+                  [json.errors.field]: json.errors.message,
+                },
+                snackbar: true,
+              });
+            });
+          }
+        })
+        .catch(error => {
+          // what kind of error would go here?
+          console.log(error);
+        });
+    }
   };
 
   componentDidMount() {
     const data = JSON.parse(localStorage.getItem('personData'));
     if (data) {
       this.setState({
+        id: data.id,
         firstName: data.firstName,
         lastName: data.lastName,
         cpf: data.cpf,
         birthdate: data.birthdate,
+        edit: true,
       });
       localStorage.removeItem('personData');
     }
