@@ -9,8 +9,9 @@ const peopleRoutes = require("./api/routes/people");
 
 const mongoose = require("mongoose");
 mongoose.connect(
-  "mongodb://people-admin:people-admin@nodejs-people-crud-shard-00-00-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-01-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-02-s4dvp.mongodb.net:27017/test?ssl=true&replicaSet=nodejs-people-crud-shard-0&authSource=admin&retryWrites=true",
-  { mongoClient: true }
+  // "mongodb://people-admin:people-admin@nodejs-people-crud-shard-00-00-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-01-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-02-s4dvp.mongodb.net:27017/test?ssl=true&replicaSet=nodejs-people-crud-shard-0&authSource=admin&retryWrites=true",
+  "mongodb://people-admin:people-admin@nodejs-people-crud-shard-00-00-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-01-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-02-s4dvp.mongodb.net:27017/test?ssl=true&replicaSet=nodejs-people-crud-shard-0&authSource=admin",
+  { mongoClient: true, useNewUrlParser: true }
 );
 
 const app = express();

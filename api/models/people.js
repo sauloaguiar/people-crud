@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-
-const peopleSchema = mongoose.Schema({
+const peopleSchema = new mongoose.Schema({
   _id: mongoose.Schema.Types.ObjectId,
   firstName: {
     type: String,
@@ -11,8 +10,9 @@ const peopleSchema = mongoose.Schema({
     required: true
   },
   cpf: {
-    type: String,
-    required: true
+    type: mongoose.Schema.Types.String,
+    required: true,
+    unique: true
   },
   birthdate: {
     type: Date,
