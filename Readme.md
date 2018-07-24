@@ -2,6 +2,17 @@
 
 Express js based backend that manages a person entity.
 
+### Running
+
+To run this project, execute `npm install` in the project root folder to get packages for the backend installed.
+After that, execute `cd frontend` and then `yarn` to get the packages for the frontend project installed.
+With all the dependencies installed, execute `npm start` on the root folder to execute start the backend and `yarn start`
+at the `/frontend` folder to start the frontend.
+
+The backend will be running at `localhost:4000` and the frontend at `localhost:3000`.
+
+### Developing
+
 The following steps are being considered as implementation priority.
 
 - Backend

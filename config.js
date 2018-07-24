@@ -1,15 +1,15 @@
+require("dotenv").config();
 var config = {
   database: {
-      host:      'localhost',     
-      user:       'root',         
-      password: 'root',         
-      port:       3306,         
-      db:       'test'         
+    url: process.env.MONGO_URL,
+    user: process.env.MONGO_USERNAME,
+    password: process.env.MONGO_USERPASS,
+    db: process.env.MONGO_DBNAME
   },
   server: {
-      host: '127.0.0.1',
-      port: 4000
+    host: "127.0.0.1",
+    port: 4000
   }
-}
+};
 
-module.exports = config
+module.exports = config;

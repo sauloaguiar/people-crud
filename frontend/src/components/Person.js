@@ -1,10 +1,8 @@
 import React from 'react';
 import { withStyles } from '@material-ui/core/styles';
-import { TextField, Button, Paper, Input, Typography } from '@material-ui/core';
+import { TextField, Button, Paper, Typography } from '@material-ui/core';
 import SaveIcon from '@material-ui/icons/Save';
 import classNames from 'classnames';
-import MaskedInput from 'react-text-mask';
-import InputMask from 'react-input-mask';
 import { withRouter } from 'react-router-dom';
 import PositionedSnackbar from './PositionedSnackbar';
 import { updatePerson, createPerson } from '../utils/network';
@@ -90,7 +88,6 @@ class Person extends React.Component {
           }
         })
         .catch(error => {
-          // what kind of error would go here?
           console.log(error);
         });
     } else {
@@ -111,7 +108,6 @@ class Person extends React.Component {
           }
         })
         .catch(error => {
-          // what kind of error would go here?
           console.log(error);
         });
     }
@@ -143,7 +139,6 @@ class Person extends React.Component {
   render() {
     const { classes } = this.props;
     const {
-      mask,
       cpf,
       firstName,
       lastName,
@@ -189,15 +184,6 @@ class Person extends React.Component {
               id="cpf"
               onChange={event => this.handleChange(event, 'cpf')}
               value={cpf}
-              // inputComponent={() => (
-              //   <InputMask
-              //     mask={mask}
-              //     id="cpf"
-              //     label="CPF"
-              //     value={cpf}
-              //     onChange={event => this.handleChange(event, 'cpf')}
-              //   />
-              // )}
             />
 
             <TextField

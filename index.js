@@ -8,9 +8,13 @@ const expressValidator = require("express-validator");
 const peopleRoutes = require("./api/routes/people");
 
 const mongoose = require("mongoose");
+const mongoConnectionUrl = `mongodb://${config.database.user}:${
+  config.database.password
+}@${config.database.url}/${
+  config.database.db
+}?ssl=true&replicaSet=nodejs-people-crud-shard-0&authSource=admin`;
 mongoose.connect(
-  // "mongodb://people-admin:people-admin@nodejs-people-crud-shard-00-00-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-01-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-02-s4dvp.mongodb.net:27017/test?ssl=true&replicaSet=nodejs-people-crud-shard-0&authSource=admin&retryWrites=true",
-  "mongodb://people-admin:people-admin@nodejs-people-crud-shard-00-00-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-01-s4dvp.mongodb.net:27017,nodejs-people-crud-shard-00-02-s4dvp.mongodb.net:27017/test?ssl=true&replicaSet=nodejs-people-crud-shard-0&authSource=admin",
+  mongoConnectionUrl,
   { mongoClient: true, useNewUrlParser: true }
 );
 
