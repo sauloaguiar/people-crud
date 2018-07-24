@@ -7,6 +7,7 @@ import MaskedInput from 'react-text-mask';
 import InputMask from 'react-input-mask';
 import { withRouter } from 'react-router-dom';
 import PositionedSnackbar from './PositionedSnackbar';
+import { updatePerson, createPerson } from '../utils/network';
 
 const styles = theme => ({
   root: {
@@ -71,28 +72,12 @@ class Person extends React.Component {
     event.preventDefault();
 
     if (edit) {
-      fetch(`http://localhost:4000/api/people/${id}`, {
-        method: 'PATCH',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify([
-          {
-            propName: 'firstName',
-            value: firstName,
-          },
-          { propName: 'lastName', value: lastName },
-          { propName: 'cpf', value: cpf },
-          { propName: 'birthdate', value: birthdate },
-        ]),
-      })
+      updatePerson({ firstName, lastName, birthdate, cpf, id })
         .then(response => {
           if (response.status >= 200 && response.status < 300) {
-            console.log(response);
             history.push('/');
           } else if (response.status === 400) {
             response.json().then(json => {
-              console.log(json);
               this.setState({
                 submitted: true,
                 errors: {
@@ -108,26 +93,12 @@ class Person extends React.Component {
           console.log(error);
         });
     } else {
-      // write validations
-      fetch('http://localhost:4000/api/people', {
-        method: 'POST',
-        headers: {
-          'content-type': 'application/json',
-        },
-        body: JSON.stringify({
-          firstName,
-          lastName,
-          cpf,
-          birthdate,
-        }),
-      })
+      createPerson({ firstName, lastName, birthdate, cpf })
         .then(response => {
           if (response.status >= 200 && response.status < 300) {
-            console.log(response);
             history.push('/');
           } else if (response.status === 400) {
             response.json().then(json => {
-              console.log(json);
               this.setState({
                 submitted: true,
                 errors: {

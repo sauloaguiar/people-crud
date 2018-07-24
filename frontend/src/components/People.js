@@ -15,6 +15,17 @@ import { withStyles } from '@material-ui/core/styles';
 import classNames from 'classnames';
 import { Link } from 'react-router-dom';
 import { Delete, Edit } from '@material-ui/icons';
+import { loadPeople, deletePerson } from '../utils/network';
+import StringMask from 'string-mask';
+import moment from 'moment';
+
+const calculateAge = date => {
+  const now = moment();
+  const birthdate = moment(date, 'YYYY-MM-DD HH:mm Z');
+  return Math.round(moment.duration(now.diff(birthdate)).asYears());
+};
+
+const cpfMask = '000.000.000-00';
 
 const styles = theme => ({
   root: {
@@ -49,30 +60,23 @@ class People extends Component {
   }
 
   componentDidMount() {
-    this.loadData();
+    this.loadPeopleData();
   }
 
-  loadData = () => {
-    fetch('http://localhost:4000/api/people')
+  loadPeopleData = () => {
+    loadPeople()
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         this.setState({ people: data.data });
       });
   };
 
   handleDelete = person => event => {
     event.preventDefault();
-    // console.log(person);
-    fetch(`http://localhost:4000/api/people/${person.id}`, {
-      method: 'DELETE',
-      headers: {
-        'content-type': 'application/json',
-      },
-    })
-      .then(result => {
-        console.log(result);
-        this.loadData();
+
+    deletePerson(person.id)
+      .then(_ => {
+        this.loadPeopleData();
       })
       .catch(err => console.log(err));
   };
@@ -80,7 +84,6 @@ class People extends Component {
   handleEdit = person => event => {
     const { history } = this.props;
     event.preventDefault();
-    console.log(person);
     localStorage.setItem('personData', JSON.stringify(person));
     history.push(`/new`);
   };
@@ -107,8 +110,10 @@ class People extends Component {
                   {person.firstName}{' '}
                 </TableCell>
                 <TableCell>{person.lastName}</TableCell>
-                <TableCell>{person.cpf}</TableCell>
-                <TableCell>{person.birthdate}</TableCell>
+                <TableCell>
+                  {new StringMask(cpfMask).apply(person.cpf)}
+                </TableCell>
+                <TableCell>{calculateAge(person.birthdate)}</TableCell>
                 <TableCell>
                   <IconButton
                     className={classes.button}
