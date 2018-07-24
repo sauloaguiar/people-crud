@@ -8,6 +8,7 @@ import InputMask from 'react-input-mask';
 import { withRouter } from 'react-router-dom';
 import PositionedSnackbar from './PositionedSnackbar';
 import { updatePerson, createPerson } from '../utils/network';
+import { dateFromString } from '../utils/date';
 
 const styles = theme => ({
   root: {
@@ -124,7 +125,7 @@ class Person extends React.Component {
         firstName: data.firstName,
         lastName: data.lastName,
         cpf: data.cpf,
-        birthdate: data.birthdate,
+        birthdate: dateFromString(data.birthdate).format('YYYY-MM-DD'),
         edit: true,
       });
       localStorage.removeItem('personData');
@@ -205,9 +206,12 @@ class Person extends React.Component {
                 submitted ? (birthdate === '' ? 'Empty field!' : ' ') : false
               }
               id="date"
-              label="birth Date"
+              label="Birthdate"
               type="date"
               value={birthdate}
+              InputLabelProps={{
+                shrink: true,
+              }}
               onChange={event => this.handleChange(event, 'birthdate')}
             />
             <Button

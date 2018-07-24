@@ -26,7 +26,7 @@ The following steps are being considered as implementation priority.
   - [x] button to remove person from list
   - [x] button to edit person from the list
   - [x] form to edit person
-  - [ ] Mask for data on the table
-    - [ ] CPF
-    - [ ] Birthdate
-  - [ ] Validation on forms before making http request
+  - [x] Mask for data on the table
+    - [x] CPF
+    - [x] Birthdate
+  - [x] Validation on forms before making http request

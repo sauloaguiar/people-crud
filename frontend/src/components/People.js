@@ -18,10 +18,11 @@ import { Delete, Edit } from '@material-ui/icons';
 import { loadPeople, deletePerson } from '../utils/network';
 import StringMask from 'string-mask';
 import moment from 'moment';
+import { dateFromString } from '../utils/date';
 
 const calculateAge = date => {
   const now = moment();
-  const birthdate = moment(date, 'YYYY-MM-DD HH:mm Z');
+  const birthdate = dateFromString(date);
   return Math.round(moment.duration(now.diff(birthdate)).asYears());
 };
 
